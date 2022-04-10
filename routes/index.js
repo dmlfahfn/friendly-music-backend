@@ -14,7 +14,7 @@ router.get("/user", (req, res) => {
       console.log(err);
     }
 
-    let sql = `SELECT username, password FROM users`;
+    let sql = `SELECT id, username, password FROM users`;
 
     req.app.locals.con.query(sql, function(err, result){
       if(err){
