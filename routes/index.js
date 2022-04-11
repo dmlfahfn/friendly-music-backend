@@ -12,7 +12,6 @@ router.get("/user", (req, res) => {
 
   req.app.locals.db.collection("users").find().toArray()
     .then(results => {
-      console.log("results",results);
       res.send(results)
     })
 });
@@ -46,5 +45,12 @@ router.get("/api", (req, res) => {
     console.error(error);
   });
 });
+
+router.post("/change", (req, res) => {
+  let user = req.body;
+
+  req.app.locals.db.collection("users").updateOne({"username": user.username,}, {$set:{"subscription": user.subscription }})
+res.json({"SALAM": "hello"})
+})
 
 module.exports = router;

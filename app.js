@@ -16,7 +16,7 @@ MongoClient.connect("mongodb://127.0.0.1:27017", {
   useUnifiedTopology: true
 })
 .then(client => {
-  console.log("Vi är uppkopplade mot databsen!");
+  console.log("Vi är uppkopplade mot databasen!");
 
   const db = client.db("music");
   app.locals.db = db;
