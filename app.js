@@ -2,7 +2,6 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const mysql = require("mysql2");
 // Enables CORS
 const cors = require("cors");
 
@@ -11,15 +10,18 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
-app.locals.con = mysql.createConnection({
-    host: "localhost",
-    port: "8889",
-    user: "songs",
-    password: "music",
-    database: "songs"
-  })
-  
+const MongoClient = require("mongodb").MongoClient
 
+MongoClient.connect("mongodb://127.0.0.1:27017", {
+  useUnifiedTopology: true
+})
+.then(client => {
+  console.log("Vi är uppkopplade mot databsen!");
+
+  const db = client.db("music");
+  app.locals.db = db;
+})
+  
 app.use(cors({ origin: true }));
 
 

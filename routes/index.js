@@ -9,21 +9,12 @@ dotenv.config();
 const bodyParser = require("body-parser");
 
 router.get("/user", (req, res) => {
-  req.app.locals.con.connect(function(err){
-    if(err){
-      console.log(err);
-    }
 
-    let sql = `SELECT id, username, password FROM users`;
-
-    req.app.locals.con.query(sql, function(err, result){
-      if(err){
-        console.log(err);
-      }
-      console.log("result", result);
-      res.send(result)
+  req.app.locals.db.collection("users").find().toArray()
+    .then(results => {
+      console.log("results",results);
+      res.send(results)
     })
-  })
 });
 
 const API_HOST_KEY = process.env.React_App_songs_host
