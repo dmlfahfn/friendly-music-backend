@@ -3,7 +3,9 @@ const dotenv = require("dotenv");
 const path = require("path");
 const axios = require("axios");
 var router = express.Router();
+const cors = require("cors");
 
+router.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 dotenv.config();
 //const { OAuth2Client } = require("google-auth-library");
 const bodyParser = require("body-parser");
@@ -46,11 +48,11 @@ router.get("/api", (req, res) => {
   });
 });
 
-router.post("/change", (req, res) => {
-  let user = req.body;
+// router.post("/change", (req, res) => {
+//   let user = req.body;
 
-  req.app.locals.db.collection("users").updateOne({"username": user.username,}, {$set:{"subscription": user.subscription }})
-res.json({"SALAM": "hello"})
-})
+//   req.app.locals.db.collection("users").updateOne({"username": user.username,}, {$set:{"subscription": user.subscription }})
+// res.json({"SALAM": "hello"})
+// })
 
 module.exports = router;
