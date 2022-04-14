@@ -41,18 +41,30 @@ router.get("/api", (req, res) => {
   };
   
   axios.request(options).then(function (response) {
-    console.log(response.data);
+    // console.log(response.data);
     res.send(response.data);
   }).catch(function (error) {
     console.error(error);
   });
 });
 
-// router.post("/change", (req, res) => {
-//   let user = req.body;
+router.post("/write", function (req, res, err) {
+   let music = req.body;
+   let Id = music.Id;
 
-//   req.app.locals.db.collection("users").updateOne({"username": user.username,}, {$set:{"subscription": user.subscription }})
-// res.json({"SALAM": "hello"})
-// })
+   req.app.locals.db.collection("likedMusic").find({Id : Id}).toArray()
+   .then(foundMusic => {
+    if(foundMusic.length === 0){
+      console.log("No music found");
+
+      let Title = music.Title;
+      let ImageUrl = music.ImageUrl;
+      let LikedBy = music.LikedBy;
+      // req.app.locals.db.collection("likedMusic").updateOne({"username": user.username,}, {$set:{"subscription": user.subscription }})
+
+    }
+  })
+
+  });
 
 module.exports = router;
