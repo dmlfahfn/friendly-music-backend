@@ -60,7 +60,7 @@ router.post("/write", function (req, res, err) {
       let Title = music.Title;
       let ImageUrl = music.ImageUrl;
       let LikedBy = music.LikedBy;
-      // req.app.locals.db.collection("likedMusic").updateOne({"username": user.username,}, {$set:{"subscription": user.subscription }})
+      req.app.locals.db.collection("likedMusic").insertOne({Id : Id, Title: Title, ImageUrl : ImageUrl, LikedBy : LikedBy })
 
     }
   })
