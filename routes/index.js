@@ -60,9 +60,14 @@ router.post("/write", function (req, res, err) {
       let Title = music.Title;
       let ImageUrl = music.ImageUrl;
       let LikedBy = music.LikedBy;
-      req.app.locals.db.collection("likedMusic").insertOne({Id : Id, Title: Title, ImageUrl : ImageUrl, LikedBy : LikedBy })
-
+      req.app.locals.db.collection("likedMusic").insertOne({Id : Id, Title: Title, ImageUrl : ImageUrl, LikedBy : [LikedBy] })
     }
+    console.log("exist");
+    console.log(delete req.body);
+    let _id = foundMusic[0].Id
+
+    let likedByArray = foundMusic[0].LikedBy;
+    console.log(likedByArray);
   })
 
   });
