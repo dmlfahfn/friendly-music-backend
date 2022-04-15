@@ -60,6 +60,7 @@ router.post("/write", function (req, res, err) {
       let Title = music.Title;
       let ImageUrl = music.ImageUrl;
       let LikedBy = music.LikedBy;
+      foundMusic.push(req.body)
       req.app.locals.db.collection("likedMusic").insertOne({Id : Id, Title: Title, ImageUrl : ImageUrl, LikedBy : [LikedBy] })
     }
     
@@ -68,11 +69,12 @@ router.post("/write", function (req, res, err) {
     let _id = foundMusic[0].Id
 
     let likedByArray = foundMusic[0].LikedBy;
-    console.log("index", likedByArray.indexOf(req.body.LikedBy));
+    console.log("indexOf", likedByArray.indexOf(req.body.LikedBy));
+    
     if (foundMusic.includes(req.body.LikedBy)){
     let idx = likedByArray.indexOf(req.body.LikedBy);
     likedByArray.splice(idx, 1);
-     console.log(likedByArray);
+     console.log("likedByArray",likedByArray);
      console.log("Unlike!", foundMusic.includes(req.body.LikedBy));
     } else {
       likedByArray.push(req.body.LikedBy);
