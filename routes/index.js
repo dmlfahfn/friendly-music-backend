@@ -50,6 +50,7 @@ router.get("/api", (req, res) => {
 
 router.post("/write", function (req, res, err) {
    let music = req.body;
+   console.log(music.Artist);
    let Id = music.Id;
 
    req.app.locals.db.collection("likedMusic").find({Id : Id}).toArray()
@@ -60,8 +61,9 @@ router.post("/write", function (req, res, err) {
       let Title = music.Title;
       let ImageUrl = music.ImageUrl;
       let LikedBy = music.LikedBy;
-      foundMusic.push({Id : Id, Title: Title, ImageUrl : ImageUrl, LikedBy : [LikedBy] })
-      req.app.locals.db.collection("likedMusic").insertOne({Id : Id, Title: Title, ImageUrl : ImageUrl, LikedBy : [LikedBy] })
+      let Artist = music.Artist;
+      foundMusic.push({Id : Id, Title: Title, ImageUrl : ImageUrl, Artist: Artist, LikedBy : [LikedBy] })
+      req.app.locals.db.collection("likedMusic").insertOne({Id : Id, Title: Title, ImageUrl : ImageUrl, Artist: Artist, LikedBy : [LikedBy] })
     }
     
     console.log("exist");
@@ -75,11 +77,11 @@ router.post("/write", function (req, res, err) {
     if (foundMusic[music].LikedBy.includes(req.body.LikedBy)){
     let idx = likedByArray.indexOf(req.body.LikedBy);
     likedByArray.splice(idx, 1);
-     console.log("likedByArray",likedByArray);
-     console.log("Unlike!", foundMusic.includes(req.body.LikedBy));
+     console.log("likedByArray");
+     console.log("Unlike!");
     } else {
       likedByArray.push(req.body.LikedBy);
-      console.log("Like!", foundMusic[music].LikedBy.includes(req.body.LikedBy));
+      console.log("Like!");
     }
   
     req.app.locals.db.collection("likedMusic").updateOne({_id: _id}, {$set:{LikedBy: likedByArray }}, 
@@ -91,6 +93,18 @@ router.post("/write", function (req, res, err) {
     } 
   })
 
+});
+
+router.get('/getlikedmusic', function (req, res) {
+  req.app.locals.db.collection("likedMusic").find().toArray().then((music) => {
+    res.json(music);
   });
+});
+
+router.get('/users', function (req, res) {
+  req.app.locals.db.collection("users").find().toArray().then((users) => {
+    res.json(users);
+  });
+});
 
 module.exports = router;
