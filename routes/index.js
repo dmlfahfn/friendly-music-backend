@@ -60,33 +60,35 @@ router.post("/write", function (req, res, err) {
       let Title = music.Title;
       let ImageUrl = music.ImageUrl;
       let LikedBy = music.LikedBy;
-      foundMusic.push(req.body)
+      foundMusic.push({Id : Id, Title: Title, ImageUrl : ImageUrl, LikedBy : [LikedBy] })
       req.app.locals.db.collection("likedMusic").insertOne({Id : Id, Title: Title, ImageUrl : ImageUrl, LikedBy : [LikedBy] })
     }
     
     console.log("exist");
-    console.log("id", foundMusic[0].Id);
-    let _id = foundMusic[0].Id
 
-    let likedByArray = foundMusic[0].LikedBy;
-    console.log("indexOf", likedByArray.indexOf(req.body.LikedBy));
-    
-    if (foundMusic.includes(req.body.LikedBy)){
+    let _id = foundMusic[0]._id
+
+    let likedByArray;
+
+   for(let music in foundMusic){
+    likedByArray = foundMusic[music].LikedBy
+    if (foundMusic[music].LikedBy.includes(req.body.LikedBy)){
     let idx = likedByArray.indexOf(req.body.LikedBy);
     likedByArray.splice(idx, 1);
      console.log("likedByArray",likedByArray);
      console.log("Unlike!", foundMusic.includes(req.body.LikedBy));
     } else {
       likedByArray.push(req.body.LikedBy);
-      console.log("Like!", foundMusic.includes(req.body.LikedBy));
+      console.log("Like!", foundMusic[music].LikedBy.includes(req.body.LikedBy));
     }
-
+  
     req.app.locals.db.collection("likedMusic").updateOne({_id: _id}, {$set:{LikedBy: likedByArray }}, 
       (err) => {
         if (err){
           console.log(err);
         }
       })
+    } 
   })
 
   });
