@@ -54,7 +54,6 @@ router.post("/write", function (req, res, err) {
    req.app.locals.db.collection("likedMusic").find({Id : Id}).toArray()
    .then(foundMusic => {
     if(foundMusic.length === 0){
-      console.log("No music found");
 
       let Title = music.Title;
       let ImageUrl = music.ImageUrl;
@@ -64,8 +63,7 @@ router.post("/write", function (req, res, err) {
       req.app.locals.db.collection("likedMusic").insertOne({Id : Id, Title: Title, ImageUrl : ImageUrl, Artist: Artist, LikedBy : [LikedBy] })
     }
     
-    console.log("exist");
-    console.log(req.body.Remove);
+    console.log("remove tagg",req.body);
 
     let _id = foundMusic[0]._id
 
@@ -76,11 +74,8 @@ router.post("/write", function (req, res, err) {
     if (foundMusic[music].LikedBy.includes(req.body.LikedBy)){
     let idx = likedByArray.indexOf(req.body.LikedBy);
     likedByArray.splice(idx, 1);
-     console.log("likedByArray");
-     console.log("Unlike!");
     } else {
       likedByArray.push(req.body.LikedBy);
-      console.log("Like!");
     }
   
     req.app.locals.db.collection("likedMusic").updateOne({_id: _id}, {$set:{LikedBy: likedByArray }}, 
