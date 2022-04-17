@@ -107,4 +107,8 @@ router.get('/users', function (req, res) {
   });
 });
 
+router.post("/followuser", function (req, res, err) {
+  console.log(req.body);
+})
+
 module.exports = router;
