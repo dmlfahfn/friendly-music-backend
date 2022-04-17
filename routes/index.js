@@ -41,7 +41,6 @@ router.get("/api", (req, res) => {
   };
   
   axios.request(options).then(function (response) {
-    // console.log(response.data);
     res.send(response.data);
   }).catch(function (error) {
     console.error(error);
@@ -66,6 +65,7 @@ router.post("/write", function (req, res, err) {
     }
     
     console.log("exist");
+    console.log(req.body.Remove);
 
     let _id = foundMusic[0]._id
 
@@ -145,5 +145,11 @@ router.post("/followuser", function (req, res, err) {
     }
   })
 })
+
+router.get('/friends', function (req, res) {
+  req.app.locals.db.collection("likedUsers").find().toArray().then((friend) => {
+    res.json(friend);
+  });
+});
 
 module.exports = router;
