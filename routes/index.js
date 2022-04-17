@@ -50,7 +50,6 @@ router.get("/api", (req, res) => {
 
 router.post("/write", function (req, res, err) {
    let music = req.body;
-   console.log(music.Artist);
    let Id = music.Id;
 
    req.app.locals.db.collection("likedMusic").find({Id : Id}).toArray()
@@ -109,6 +108,42 @@ router.get('/users', function (req, res) {
 
 router.post("/followuser", function (req, res, err) {
   console.log(req.body);
+
+  let Id = req.body.Id
+  let User = req.body.User
+  let Me = req.body.Me
+
+  req.app.locals.db.collection("likedUsers").find({Me : Me}).toArray()
+  .then(likedUser => {
+    if(likedUser.length === 0){
+      console.log("Not following any user");
+      likedUser.push({Id : Id, User: [User], Me: Me})
+      req.app.locals.db.collection("likedUsers").insertOne({Id : Id, User: [User], Me: Me })
+    }
+
+    console.log("User exist");
+
+    let likedUserArray;
+    for(let user in likedUser){
+      likedUserArray = likedUser[user].User
+      if(likedUser[user].User.includes(req.body.User)){
+        let ind = likedUserArray.indexOf(req.body.User);
+        likedUserArray.splice(ind, 1);
+         console.log("likedUserArray");
+         console.log("Unfollow!");
+      }else {
+        likedUserArray.push(User);
+        console.log("Follow!");
+      }
+
+      req.app.locals.db.collection("likedUsers").updateOne({Me: Me}, {$set:{User: likedUserArray }}, 
+        (err) => {
+          if (err){
+            console.log(err);
+          }
+        })
+    }
+  })
 })
 
 module.exports = router;
