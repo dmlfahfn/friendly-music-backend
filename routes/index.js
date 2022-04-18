@@ -89,8 +89,10 @@ router.post("/write", function (req, res, err) {
 
 });
 
-router.get('/getlikedmusic', function (req, res) {
-  req.app.locals.db.collection("likedMusic").find().toArray().then((music) => {
+router.post('/getlikedmusic', function (req, res) {
+
+  console.log(req.body.user);
+  req.app.locals.db.collection("likedMusic").find({LikedBy : {$in : [req.body.user]}}).toArray().then((music) => {
     res.json(music);
   });
 });
@@ -141,8 +143,8 @@ router.post("/followuser", function (req, res, err) {
   })
 })
 
-router.get('/friends', function (req, res) {
-  req.app.locals.db.collection("likedUsers").find().toArray().then((friend) => {
+router.post('/friends', function (req, res) {
+  req.app.locals.db.collection("likedUsers").find({Me : {$in : [req.body.user]}}).toArray().then((friend) => {
     res.json(friend);
   });
 });
