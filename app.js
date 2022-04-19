@@ -11,6 +11,7 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
+//Databse in mongoDB (not atlas)
 const MongoClient = require("mongodb").MongoClient
 
 MongoClient.connect("mongodb://127.0.0.1:27017", {
@@ -33,8 +34,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-// app.use('/.netlify/functions/music', indexRouter);
 app.use('/users', usersRouter);
 
 module.exports = app;
-// module.exports.handler = serverless(app);

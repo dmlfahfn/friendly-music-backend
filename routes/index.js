@@ -5,9 +5,13 @@ const axios = require("axios");
 var router = express.Router();
 const cors = require("cors");
 
+//Enabling cors
 router.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 dotenv.config();
+
+//planned { OAuth2Client } but didn't have time
 //const { OAuth2Client } = require("google-auth-library");
+
 const bodyParser = require("body-parser");
 
 router.get("/user", (req, res) => {
@@ -21,7 +25,7 @@ router.get("/user", (req, res) => {
 const API_HOST_KEY = process.env.React_App_songs_host
 const API_KEY = process.env.React_App_songs_key
 
-// get all projects
+// get all projects from spotify API, max 500 hits
 router.get("/api", (req, res) => {
 
   let options = {
@@ -47,6 +51,7 @@ router.get("/api", (req, res) => {
   });
 });
 
+//saves all the liked songs and delete them as well
 router.post("/write", function (req, res, err) {
    let music = req.body;
    let Id = music.Id;
@@ -69,6 +74,7 @@ router.post("/write", function (req, res, err) {
 
     let likedByArray;
 
+    //removes a user who dislikes an album by taking the index and deleting
    for(let music in foundMusic){
     likedByArray = foundMusic[music].LikedBy
     if (req.body.Removed){
@@ -109,6 +115,7 @@ router.get('/users', function (req, res) {
   });
 });
 
+//does the same with following users like with songs
 router.post("/followuser", function (req, res, err) {
   console.log(req.body);
 
