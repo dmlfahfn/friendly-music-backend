@@ -71,7 +71,7 @@ router.post("/write", function (req, res, err) {
 
    for(let music in foundMusic){
     likedByArray = foundMusic[music].LikedBy
-    if (foundMusic[music].LikedBy.includes(req.body.LikedBy)){
+    if (req.body.Removed){
     let idx = likedByArray.indexOf(req.body.LikedBy);
     likedByArray.splice(idx, 1);
     } else {
@@ -93,6 +93,12 @@ router.post('/getlikedmusic', function (req, res) {
 
   console.log(req.body.user);
   req.app.locals.db.collection("likedMusic").find({LikedBy : {$in : [req.body.user]}}).toArray().then((music) => {
+    res.json(music);
+  });
+});
+
+router.get('/getlikedmusicall', function (req, res) {
+  req.app.locals.db.collection("likedMusic").find().toArray().then((music) => {
     res.json(music);
   });
 });
@@ -147,6 +153,14 @@ router.post('/friends', function (req, res) {
   req.app.locals.db.collection("likedUsers").find({Me : {$in : [req.body.user]}}).toArray().then((friend) => {
     res.json(friend);
   });
+});
+
+router.post('/friendsmusic', function (req, res) {
+
+  req.app.locals.db.collection("likedMusic").find().toArray().then((song) => {
+    res.json(song)
+  })
+
 });
 
 module.exports = router;
