@@ -2,6 +2,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+
 // Enables CORS
 const cors = require("cors");
 
@@ -32,6 +33,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+// app.use('/.netlify/functions/music', indexRouter);
 app.use('/users', usersRouter);
 
 module.exports = app;
+// module.exports.handler = serverless(app);
